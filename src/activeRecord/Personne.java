@@ -81,5 +81,20 @@ public class Personne {
         return arrayList;
     }
 
+    public static void createTable() throws SQLException {
+        Connection connection = DBConnection.getConnection();
+        Statement statement = connection.createStatement();
+        String sql = "CREATE TABLE Personne ( id INT, nom VARCHAR2(25), prenom VARCHAR2(30) )";
+        statement.executeUpdate(sql);
+    }
+
+    public static void deleteTable() throws SQLException
+    {
+        Connection connection = DBConnection.getConnection();
+        Statement statement = connection.createStatement();
+        String sql = "DROP TABLE Personne";
+        statement.executeUpdate(sql);
+    }
+
 
 }
