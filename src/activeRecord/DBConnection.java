@@ -7,7 +7,7 @@ import java.util.Properties;
 
 public class DBConnection {
     private static Connection connection;
-    private static String nomDb;
+    static String nomDb;
 
     public static Connection getConnection() {
 
