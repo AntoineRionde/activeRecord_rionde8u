@@ -39,8 +39,7 @@ public class Personne {
 
             arrayList.add(p);
         }
-        connection.close();
-
+        //connection.close();
         return arrayList;
     }
 
@@ -60,6 +59,26 @@ public class Personne {
             res.setId(idP);
         }
         return res;
+    }
+
+    public static ArrayList<Personne> findByName(String pNom) throws SQLException {
+        Connection connection = DBConnection.getConnection();
+        ArrayList<Personne> arrayList = new ArrayList<>();
+        String sql = "SELECT * FROM personne WHERE NOM = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setString(1, pNom);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        while (resultSet.next())
+        {
+            int id = resultSet.getInt(1);
+            String nom = resultSet.getString(2);
+            String prenom = resultSet.getString(3);
+            Personne p = new Personne(nom, prenom);
+            p.setId(id);
+            arrayList.add(p);
+        }
+        //connection.close();
+        return arrayList;
     }
 
 
