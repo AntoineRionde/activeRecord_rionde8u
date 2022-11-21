@@ -108,15 +108,28 @@ public class Personne {
         Connection connection = DBConnection.getConnection();
         Statement statement = connection.createStatement();
         String sql = "CREATE TABLE Personne ( id INT, nom VARCHAR2(25), prenom VARCHAR2(30) )";
-        statement.executeUpdate(sql);
+        try {
+            statement.executeUpdate(sql);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public static void deleteTable() throws SQLException
+    public static void deleteTable()
     {
         Connection connection = DBConnection.getConnection();
-        Statement statement = connection.createStatement();
+        Statement statement = null;
+        try {
+            statement = connection.createStatement();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         String sql = "DROP TABLE Personne";
-        statement.executeUpdate(sql);
+        try {
+            statement.executeUpdate(sql);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 
