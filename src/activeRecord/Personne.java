@@ -81,6 +81,29 @@ public class Personne {
         return arrayList;
     }
 
+    public void save() throws SQLException {
+        if (this.id == -1)
+        {
+            Connection connection = DBConnection.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO Personne VALUES (?, ?, ?)");
+            preparedStatement.setInt(1, this.id);
+            preparedStatement.setString(2, this.nom);
+            preparedStatement.setString(3, this.prenom);
+            preparedStatement.executeUpdate();
+        }
+    }
+
+    public void delete() throws SQLException
+    {
+        if (this.id != -1)
+        {
+            Connection connection = DBConnection.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM Personne WHERE id = ?");
+            preparedStatement.setInt(1, this.id);
+            preparedStatement.executeUpdate();
+        }
+    }
+
     public static void createTable() throws SQLException {
         Connection connection = DBConnection.getConnection();
         Statement statement = connection.createStatement();
