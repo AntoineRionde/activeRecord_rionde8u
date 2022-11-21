@@ -22,6 +22,14 @@ public class Personne {
         this.id = id;
     }
 
+    public void setPrenom(String prenom) {
+        this.prenom = prenom;
+    }
+
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+
     public static ArrayList<Personne> findAll() throws SQLException {
         ArrayList<Personne> arrayList = new ArrayList<>();
         Connection connection = DBConnection.getConnection();
@@ -81,15 +89,36 @@ public class Personne {
         return arrayList;
     }
 
+    private void saveNew() throws SQLException
+    {
+        Connection connection = DBConnection.getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO Personne VALUES (?, ?, ?)");
+        preparedStatement.setInt(1, this.id);
+        preparedStatement.setString(2, this.nom);
+        preparedStatement.setString(3, this.prenom);
+        preparedStatement.executeUpdate();
+        // met à jour l'attribut id de l'objet avec l'indice crée par la table grâce à l'auto-incrément
+        this.id = preparedStatement.getResultSet().getInt(1);
+    }
+
+    private void update() throws SQLException
+    {
+        Connection connection = DBConnection.getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement("UPDATE Personne SET nom = ? AND prenom = ? WHERE id = ?  ");
+        preparedStatement.setString(1, this.nom);
+        preparedStatement.setString(2, this.prenom);
+        preparedStatement.setInt(3, this.id);
+        preparedStatement.executeUpdate();
+    }
+
     public void save() throws SQLException {
         if (this.id == -1)
         {
-            Connection connection = DBConnection.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO Personne VALUES (?, ?, ?)");
-            preparedStatement.setInt(1, this.id);
-            preparedStatement.setString(2, this.nom);
-            preparedStatement.setString(3, this.prenom);
-            preparedStatement.executeUpdate();
+            saveNew();
+        }
+        else
+        {
+            update();
         }
     }
 
@@ -101,6 +130,7 @@ public class Personne {
             PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM Personne WHERE id = ?");
             preparedStatement.setInt(1, this.id);
             preparedStatement.executeUpdate();
+            this.id = -1;
         }
     }
 
