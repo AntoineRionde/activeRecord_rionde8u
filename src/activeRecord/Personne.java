@@ -31,6 +31,10 @@ public class Personne {
         this.id = id;
     }
 
+    public int getId() {
+        return this.id;
+    }
+
     public void setPrenom(String prenom) {
         this.prenom = prenom;
     }
@@ -117,21 +121,21 @@ public class Personne {
     private void update() throws SQLException
     {
         Connection connection = DBConnection.getConnection();
-        PreparedStatement preparedStatement = connection.prepareStatement("UPDATE Personne SET nom = ? AND prenom = ? WHERE id = ?  ");
+        PreparedStatement preparedStatement = connection.prepareStatement("UPDATE Personne SET nom = ?, prenom = ? WHERE id = ?  ");
         preparedStatement.setString(1, this.nom);
         preparedStatement.setString(2, this.prenom);
         preparedStatement.setInt(3, this.id);
-        preparedStatement.executeUpdate();
+        preparedStatement.execute();
     }
 
     public void save() throws SQLException {
         if (this.id == -1)
         {
-            saveNew();
+            this.saveNew();
         }
         else
         {
-            update();
+            this.update();
         }
     }
 
@@ -142,7 +146,7 @@ public class Personne {
             Connection connection = DBConnection.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM Personne WHERE id = ?");
             preparedStatement.setInt(1, this.id);
-            preparedStatement.executeUpdate();
+            preparedStatement.execute();
             this.id = -1;
         }
     }
