@@ -17,6 +17,15 @@ public class Personne {
         this.id = -1;
     }
 
+    @Override
+    public String toString() {
+        return "Personne{" +
+                "id=" + id +
+                ", nom='" + nom + '\'' +
+                ", prenom='" + prenom + '\'' +
+                '}';
+    }
+
     public void setId(int id)
     {
         this.id = id;
@@ -92,13 +101,17 @@ public class Personne {
     private void saveNew() throws SQLException
     {
         Connection connection = DBConnection.getConnection();
-        PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO Personne VALUES (?, ?, ?)");
-        preparedStatement.setInt(1, this.id);
-        preparedStatement.setString(2, this.nom);
-        preparedStatement.setString(3, this.prenom);
+        PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO Personne (nom, prenom) VALUES (?, ?)",  Statement.RETURN_GENERATED_KEYS);
+        preparedStatement.setString(1, this.nom);
+        preparedStatement.setString(2, this.prenom);
         preparedStatement.executeUpdate();
         // met à jour l'attribut id de l'objet avec l'indice crée par la table grâce à l'auto-incrément
-        this.id = preparedStatement.getResultSet().getInt(1);
+        int autoInc = -1;
+        ResultSet rs = preparedStatement.getGeneratedKeys();
+        if (rs.next()) {
+            autoInc = rs.getInt(1);
+        }
+        this.id = autoInc;
     }
 
     private void update() throws SQLException
@@ -137,7 +150,7 @@ public class Personne {
     public static void createTable() throws SQLException {
         Connection connection = DBConnection.getConnection();
         Statement statement = connection.createStatement();
-        String sql = "CREATE TABLE Personne ( id INT, nom VARCHAR2(25), prenom VARCHAR2(30) )";
+        String sql = "CREATE TABLE Personne ( id INTEGER primary key AUTO_INCREMENT , nom VARCHAR(25), prenom VARCHAR(30) ) ENGINE = InnoDB";
         try {
             statement.executeUpdate(sql);
         } catch (SQLException e) {

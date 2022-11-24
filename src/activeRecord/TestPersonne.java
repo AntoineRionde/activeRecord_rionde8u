@@ -1,7 +1,9 @@
 package activeRecord;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
 
@@ -17,6 +19,14 @@ public class TestPersonne {
         p3.save();
         Personne p4 = new Personne("Fincher", "David");
         p4.save();
+    }
+
+    @Test
+    public void test1_findById() throws SQLException
+    {
+        Personne p = Personne.findById(4);
+        Assertions.assertNotNull(p);
+        //System.out.println(p);
     }
 
     @AfterEach
