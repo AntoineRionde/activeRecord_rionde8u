@@ -1,9 +1,6 @@
 package activeRecord;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class Film {
     private String titre;
@@ -24,7 +21,7 @@ public class Film {
         this.titre = titre;
     }
 
-    public Film findById(int id) throws SQLException {
+    public static Film findById(int id) throws SQLException {
         Film film = null;
         String sql = "SELECT * FROM Film WHERE id = ?";
         Connection connection = DBConnection.getConnection();
@@ -39,6 +36,26 @@ public class Film {
             film = new Film(id2, id_real, titre);
         }
         return film;
+    }
+
+    public Personne getRealisateur() throws SQLException {
+        return Personne.findById(this.id_real);
+    }
+
+    public static void createTable() throws SQLException
+    {
+        Connection connection = DBConnection.getConnection();
+        Statement statement = connection.createStatement();
+        String sql = "CREATE TABLE Film (id INTEGER primary key AUTO INCREMENT, titre varchar(40) NOT NULL, id_rea INTEGER DEFAULT NULL) ENGINE=InnoDB";
+        statement.execute(sql);
+    }
+
+    public static void deleteTable() throws SQLException {
+        Connection connection = DBConnection.getConnection();
+        Statement statement = null;
+        statement = connection.createStatement();
+        String sql = "DROP TABLE Film";
+        statement.execute(sql);
     }
 
 
