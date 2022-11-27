@@ -34,6 +34,15 @@ public class Film {
         this.titre = titre;
     }
 
+    @Override
+    public String toString() {
+        return "Film{" +
+                "titre='" + titre + '\'' +
+                ", id=" + id +
+                ", id_real=" + id_real +
+                '}';
+    }
+
     public static Film findById(int id) throws SQLException {
         Film film = null;
         String sql = "SELECT * FROM Film WHERE id = ?";
@@ -125,7 +134,7 @@ public class Film {
     public static ArrayList<Film> findByRealisateur(Personne p) throws SQLException {
         ArrayList<Film> arrayList = new ArrayList<>();
         int id_real = p.getId();
-        String sql = "SELECT * FROM Film WHERE id_real = ?";
+        String sql = "SELECT * FROM Film WHERE id_rea = ?";
         Connection connection = DBConnection.getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
         preparedStatement.setInt(1, id_real);
