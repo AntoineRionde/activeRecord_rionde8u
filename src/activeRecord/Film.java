@@ -40,7 +40,7 @@ public class Film {
         Connection connection = DBConnection.getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
         preparedStatement.setInt(1, id);
-        ResultSet resultSet = preparedStatement.getResultSet();
+        ResultSet resultSet = preparedStatement.executeQuery();
         while (resultSet.next())
         {
             int id2 = resultSet.getInt(1);
@@ -59,7 +59,7 @@ public class Film {
     {
         Connection connection = DBConnection.getConnection();
         Statement statement = connection.createStatement();
-        String sql = "CREATE TABLE Film (id INTEGER primary key AUTO INCREMENT, titre varchar(40) NOT NULL, id_rea INTEGER DEFAULT NULL) ENGINE=InnoDB";
+        String sql = "CREATE TABLE Film (id INTEGER primary key AUTO_INCREMENT, titre varchar(40) NOT NULL, id_rea INTEGER DEFAULT NULL) ENGINE=InnoDB";
         statement.execute(sql);
     }
 
@@ -120,6 +120,24 @@ public class Film {
         {
             this.update();
         }
+    }
+
+    public static ArrayList<Film> findByRealisateur(Personne p) throws SQLException {
+        ArrayList<Film> arrayList = new ArrayList<>();
+        int id_real = p.getId();
+        String sql = "SELECT * FROM Film WHERE id_real = ?";
+        Connection connection = DBConnection.getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setInt(1, id_real);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        while (resultSet.next())
+        {
+            int idF = resultSet.getInt(1);
+            String titre = resultSet.getString(2);
+            arrayList.add(new Film(idF, id_real, titre));
+        }
+        return arrayList;
+
     }
 
 

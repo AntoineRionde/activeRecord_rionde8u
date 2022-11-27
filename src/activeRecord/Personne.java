@@ -106,7 +106,6 @@ public class Personne {
             p.setId(id);
             arrayList.add(p);
         }
-        //connection.close();
         return arrayList;
     }
 
