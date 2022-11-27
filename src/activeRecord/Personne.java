@@ -35,6 +35,14 @@ public class Personne {
         return this.id;
     }
 
+    public String getNom() {
+        return nom;
+    }
+
+    public String getPrenom() {
+        return prenom;
+    }
+
     public void setPrenom(String prenom) {
         this.prenom = prenom;
     }

@@ -1,6 +1,7 @@
 package activeRecord;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 public class Film {
     private String titre;
@@ -18,6 +19,18 @@ public class Film {
     {
         this.id = id;
         this.id_real = id_real;
+        this.titre = titre;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getTitre() {
+        return titre;
+    }
+
+    public void setTitre(String titre) {
         this.titre = titre;
     }
 
