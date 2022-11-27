@@ -1,4 +1,4 @@
 package activeRecord;
 
-public class RealisateurAbsentException {
+public class RealisateurAbsentException extends Throwable {
 }

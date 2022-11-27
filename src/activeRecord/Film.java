@@ -58,5 +58,56 @@ public class Film {
         statement.execute(sql);
     }
 
+    public void delete() throws SQLException
+    {
+        if (this.id != -1)
+        {
+            Connection connection = DBConnection.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM Film WHERE id = ?");
+            preparedStatement.setInt(1, this.id);
+            preparedStatement.execute();
+            this.id = -1;
+        }
+    }
+
+    private void saveNew() throws SQLException, RealisateurAbsentException {
+        if (this.id_real == -1) throw new RealisateurAbsentException();
+
+        Connection connection = DBConnection.getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO Film (titre, id_rea) VALUES (?, ?)",  Statement.RETURN_GENERATED_KEYS);
+        preparedStatement.setString(1, this.titre);
+        preparedStatement.setInt(2, this.id_real);
+        preparedStatement.executeUpdate();
+        // met à jour l'attribut id de l'objet avec l'indice crée par la table grâce à l'auto-incrément
+        int autoInc = -1;
+        ResultSet rs = preparedStatement.getGeneratedKeys();
+        if (rs.next()) {
+            autoInc = rs.getInt(1);
+        }
+        this.id = autoInc;
+    }
+
+    private void update() throws SQLException, RealisateurAbsentException {
+        if (this.id_real == -1) throw new RealisateurAbsentException();
+
+        Connection connection = DBConnection.getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement("UPDATE Film SET titre = ?, id_rea = ? WHERE id = ?");
+        preparedStatement.setString(1, this.titre);
+        preparedStatement.setInt(2, this.id_real);
+        preparedStatement.setInt(3, this.id);
+        preparedStatement.execute();
+    }
+
+    public void save() throws SQLException, RealisateurAbsentException {
+        if (this.id == -1)
+        {
+            this.saveNew();
+        }
+        else
+        {
+            this.update();
+        }
+    }
+
 
 }
