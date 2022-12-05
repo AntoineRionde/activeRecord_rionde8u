@@ -13,6 +13,9 @@ public class TestFilm {
     Film f;
     Film f2;
     Personne p;
+
+    ArrayList<Film> test1;
+
     @BeforeEach
     public void init() throws SQLException, RealisateurAbsentException {
         Film.createTable();
@@ -23,15 +26,23 @@ public class TestFilm {
         f.save();
         f2 = new Film("ten", p);
         f2.save();
+
+        test1 = new ArrayList<>();
+        test1.add(f);
+        test1.add(f2);
     }
 
     @Test
     public void test1_findByRealisateur() throws SQLException
     {
-        ArrayList<Film> arrayList = Film.findByRealisateur(p);
-        Film f = Film.findById(2);
-        // verifier que la deuxième film cree dans la base correspond bien au film a l'indice 1 dans l'array list
-        Assertions.assertEquals(f.toString(), arrayList.get(1).toString());
+        ArrayList<Film> listFilm = Film.findByRealisateur(p);
+
+        // Recuperer les deux films cree dans init (avec la méthode findById) et verifier qu'ils sont bien dans l'arrayList "listFilm"
+        Film f1 = Film.findById(1);
+        Assertions.assertEquals(f1.toString(), listFilm.get(0).toString());
+
+        Film f2 = Film.findById(2);
+        Assertions.assertEquals(f2.toString(), listFilm.get(1).toString());
     }
 
     @Test
