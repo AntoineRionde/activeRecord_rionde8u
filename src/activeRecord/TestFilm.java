@@ -34,6 +34,30 @@ public class TestFilm {
         Assertions.assertEquals(f.toString(), arrayList.get(1).toString());
     }
 
+    @Test
+    public void test2_creerFilm() throws SQLException, RealisateurAbsentException {
+        Film film = new Film("Titanic", p);
+        film.save();
+        // verifier que la methode findById retourne bien p(Steven Spielberg)
+        Film f1 = Film.findById(film.getId());
+        Assertions.assertEquals(film.toString(), f1.toString());
+    }
+
+    @Test
+    public void test3_delete() throws SQLException {
+        int id = f.getId();
+        f.delete();
+        Assertions.assertNull(Film.findById(id));
+    }
+
+    @Test
+    public void test4_update() throws SQLException, RealisateurAbsentException {
+        f2 = new Film("eleven", p);
+        f2.save();
+        Film f22 = Film.findById(f2.getId());
+        Assertions.assertEquals(f2.toString(), f22.toString());
+    }
+
     @AfterEach
     public void after() throws SQLException {
         Film.deleteTable();
